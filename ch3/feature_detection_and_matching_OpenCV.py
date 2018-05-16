@@ -33,10 +33,22 @@ if __name__ == "__main__":
     for m, n in matches:
         if m.distance < 0.7*n.distance:
             good.append(m)
-
-    for i in good:
-        print i.queryIdx
-
-    # if len(good) > 10:
-        # src_pts = np.float32([kp1[m.queryIdx].pt for m in good])
     
+    if len(good) > 10:
+        src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+        dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+
+    img1_width = int(img1.shape[1])
+    print img1_width
+    appended_image = np.concatenate((img1, img2), axis=1)
+
+    for i in range(0, len(src_pts)):
+        img1_pos = (int(src_pts[i][0][0]), int(src_pts[i][0][1]))
+        img2_pos = (int(dst_pts[i][0][0])+img1_width, int(dst_pts[i][0][1]))
+        cv2.circle(appended_image, img1_pos, 3, (0, 0, 255), -1)
+        cv2.circle(appended_image, img2_pos, 3, (0, 0, 255), -1)
+        cv2.line(appended_image, img1_pos, img2_pos, (0, 255, 0), 1)
+
+    cv2.imshow("", appended_image)
+    cv2.imwrite("appended_matched_image.jpg", appended_image)
+    cv2.waitKey()
