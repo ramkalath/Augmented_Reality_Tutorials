@@ -1,9 +1,11 @@
-#                                       Amme Sharanam!!!
-# Title : this program implements sift.
-# Author: Ramkumar
-# sample execution line : python sift.py  "basmati.pgm" "scene.pgm", python sift.py  "img1.bmp" "img2.bmp"
-# status : completed.
-
+# *****************************************************************************
+# * Filename : feature_detection_and_matching.py
+# * Date : 14/May/2018
+# * Author : Ram
+# * Email : ramkalath@gmail.com
+# * Breif Description :
+# * Detailed Description :
+# *****************************************************************************
 import numpy as np
 np.set_printoptions(threshold=np.nan)
 import cv2
