@@ -4,7 +4,7 @@
 # * Author : Ram
 # * Email : ramkalath@gmail.com
 # * Breif Description : Implements Direct Linear Transform.
-# * Detailed Description : Checkout the image file before you go through this code.
+# * Detailed Description : Checkout the image file before you go through this code. To run this code type "python DLT.py"
 # *****************************************************************************
 
 # see homography_transformation.jpg before you read this code

@@ -1,0 +1,4 @@
+implements stitching 
+
+to run:
+python sift.py img1.bmp img2.bmp

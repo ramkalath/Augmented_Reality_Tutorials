@@ -1,0 +1,5 @@
+to run this code type
+
+python feature_detection_and_matching.py img1.bmp img2.bmp
+						(or)
+python feature_detection_and_matching_OpenCV.py img1.bmp img2.bmp

@@ -3,8 +3,8 @@
 # * Date : 14/May/2018
 # * Author : Ram
 # * Email : ramkalath@gmail.com
-# * Breif Description :
-# * Detailed Description :
+# * Breif Description : implements feature detection and matching using David Lowe's binaries
+# * Detailed Description : To run this code type "python feature_detection_and_matching.py img1.bmp img2.bmp"
 # *****************************************************************************
 import numpy as np
 np.set_printoptions(threshold=np.nan)

@@ -3,8 +3,8 @@
 # * Date : 15/May/2017
 # * Author : Ram
 # * Email : ramkalath@gmail.com
-# * Breif Description : Implements sift using OpenCV
-# * Detailed Description :
+# * Breif Description : Implements sift feature detection and matching using OpenCV
+# * Detailed Description : To run this code type "python feature_detection_and_matching_OpenCV.py img1.bmp img2.bmp"
 # *****************************************************************************
 
 import cv2

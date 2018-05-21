@@ -1,0 +1,6 @@
+To run the cpp code 
+1) make
+2) make run
+
+To run the python code
+1) python test_opencv.py
