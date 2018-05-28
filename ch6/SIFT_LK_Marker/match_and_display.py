@@ -29,21 +29,19 @@ def match_and_display(good_old, good_new, img1, img2):
         cv2.circle(appendedimage, (x1,y1), 3, (0,0,255), -1) # circling small red dots on the keypoints for easy visiblity
         cv2.circle(appendedimage, (x2+w,y2), 3, (0,0,255), -1) # circling small red dots on image2
         cv2.line(appendedimage, (x1, y1),(x2+w, y2), (0,255,0), 1) # drawing lines between the matching points
-        cv2.imshow("", appendedimage)
-        cv2.waitKey(10)
-        while 1:
-            if cv2.waitKey(5)==27:   # upon "esc" keypress the next match is drawn
-                continue;
-            else:
-                cv2.imshow("",appendedimage) # shows the matched appended image
-                key = cv2.waitKey(0)
-                if key == 115:
-                    cv2.imwrite("appended_matched_image.jpg", appendedimage)   # writes the appended matched image onto disk
-                    break
-                if key == 27:
-                    break
-        cv2.imwrite("appended_matched_image.jpg", appendedimage)
-        # print tuple(good_old[i][0])
+        return appendedimage
+        # while 1:
+            # if cv2.waitKey(5)==27:   # upon "esc" keypress the next match is drawn
+                # continue;
+            # else:
+                # cv2.imshow("",appendedimage) # shows the matched appended image
+                # key = cv2.waitKey(0)
+                # if key == 115:
+                    # cv2.imwrite("appended_matched_image.jpg", appendedimage)   # writes the appended matched image onto disk
+                    # break
+                # if key == 27:
+                    # break
+        # cv2.imwrite("appended_matched_image.jpg", appendedimage)
         
 
 
