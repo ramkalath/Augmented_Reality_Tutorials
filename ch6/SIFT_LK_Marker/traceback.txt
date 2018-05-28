@@ -1,0 +1,45 @@
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/pudb/__init__.py", line 119, in runscript
+    dbg._runscript(mainpyfile)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 457, in _runscript
+    self.run(statement, globals=globals_, locals=locals_)
+  File "/usr/lib/python2.7/bdb.py", line 400, in run
+    exec cmd in globals, locals
+  File "<string>", line 1, in <module>
+  File "sift_lk_realtime_marker.py", line 10, in <module>
+    import cv2
+  File "sift_lk_realtime_marker.py", line 10, in <module>
+    import cv2
+  File "/usr/lib/python2.7/bdb.py", line 49, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 187, in dispatch_line
+    self.user_line(frame)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 408, in user_line
+    self.interaction(frame)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 376, in interaction
+    show_exc_dialog=show_exc_dialog)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 2118, in call_with_ui
+    return f(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 2362, in interaction
+    self.event_loop()
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 2328, in event_loop
+    toplevel.keypress(self.size, k)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/ui_tools.py", line 106, in keypress
+    result = self._w.keypress(size, key)
+  File "/usr/local/lib/python2.7/dist-packages/urwid/container.py", line 1131, in keypress
+    return self.body.keypress( (maxcol, remaining), key )
+  File "/usr/local/lib/python2.7/dist-packages/urwid/container.py", line 2271, in keypress
+    key = w.keypress((mc,) + size[1:], key)
+  File "/usr/local/lib/python2.7/dist-packages/urwid/container.py", line 1590, in keypress
+    key = self.focus.keypress(tsize, key)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/ui_tools.py", line 111, in keypress
+    return handler(self, size, key)
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 1107, in next
+    end()
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 1099, in end
+    self.debugger.save_breakpoints()
+  File "/usr/local/lib/python2.7/dist-packages/pudb/debugger.py", line 267, in save_breakpoints
+    if not bp.temporary])
+  File "/usr/local/lib/python2.7/dist-packages/pudb/settings.py", line 541, in save_breakpoints
+    histfile = open(get_breakpoints_file_name(), 'w')
+IOError: [Errno 13] Permission denied: '/home/ram/.config/pudb/saved-breakpoints-2.7'

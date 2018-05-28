@@ -11,6 +11,16 @@ import cv2
 import numpy as np
 import sys
 
+def append_images(img1, img2):
+        h1 = len(img1)
+        w1 = len(img1[0])
+        h2 = len(img2)
+        w2 = len(img2[0])
+        appendedimage = np.zeros((max(h1,h2), w1+w2 ,3), np.uint8) # creates a template image the size of both the images appended together
+        appendedimage[:h1, :w1] = img1  # inserting image1 into the template image
+        appendedimage[:h2, w1:w1+w2] = img2  # inserting image2 into the template image
+        return appendedimage
+
 if __name__ == "__main__":
     img_path = sys.argv
     img1 = cv2.imread(img_path[1])          # read the first image
@@ -42,7 +52,8 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------
 
     img1_width = int(img1.shape[1])    # we are going to append the images so width of the first image will be useful when, in the appended image, we draw points
-    appended_image = np.concatenate((img1, img2), axis=1)   # appending images. This wont work for images with discrepant number of rows, I think. But test images are of the same size so i took the easy way out. Hop over to the other code (feature_detection_and_matching.py) for a proper code snippet to append two diffently shaped images.
+    # appended_image = np.concatenate((img1, img2), axis=1)   # appending images. This wont work for images with discrepant number of rows, I think. But test images are of the same size so i took the easy way out. Hop over to the other code (feature_detection_and_matching.py) for a proper code snippet to append two diffently shaped images.
+    appended_image = append_images(img1, img2)
 
     for i in range(0, len(src_pts)):
         img1_pos = (int(src_pts[i][0][0]), int(src_pts[i][0][1]))   # converting src_pts points to int, tuple
