@@ -4,15 +4,14 @@
 # * Author : Ram
 # * Email : ramkalath@gmail.com
 # * Breif Description : realtime marker detection using sift and lk
-# * Detailed Description :
+# * Detailed Description : to run this code type ./run.sh
 # *****************************************************************************
 
 import cv2
 import numpy as np
 import sys
 import time
-import match_and_display as md
-
+import display as md
 
 # params for ShiTomasi corner detection
 feature_params = dict(maxCorners = 100,
@@ -35,8 +34,11 @@ if __name__ == "__main__":
 
     # capture from the webcam the first frame to compute the homography using SIFT. This will take some time ---------------
     cap = cv2.VideoCapture(0)
-    flag, first = cap.read()
-    # first = cv2.imread("./first_frame.jpg")
+    k=0
+    while k<80:
+        flag, first = cap.read()
+        k+=1
+
     gray_first = cv2.cvtColor(first, cv2.COLOR_BGR2GRAY)
     print "first frame from the webcam captured"
 
@@ -69,7 +71,8 @@ if __name__ == "__main__":
         print "could not find a matching marker"
         exit()
     # ---------------------------------------------------------------------------------------------------------------------
-    points_on_marker_image = np.array([[0, 0, 1], [300, 0, 1], [300, 475, 1], [0, 475, 1]])
+    # These are the points to be tracked to draw the frame around the tracked marker. Notice we are defining them for the marker image
+    points_on_marker_image = np.array([[0, 0, 1], [marker_img.shape[0], 0, 1], [marker_img.shape[0], marker_img.shape[1], 1], [0, marker_img.shape[1], 1]])
 
     # p1 is the array of points to be tracked on the first image ----------------------------------------------------------
     p1 = dst_pts
@@ -81,21 +84,25 @@ if __name__ == "__main__":
         # tracking between first and subsequent frames using LK optical flow ------------------------------------------------
         ps, st, err = cv2.calcOpticalFlowPyrLK(gray_first, gray_subsequent, p1, None, **lk_params)
 
+        # lets compute homography between two images
         h_new, mask = cv2.findHomography(p1, ps, cv2.RANSAC, 5.0)
         h = np.dot(h, h_new) # compounded homography between images
 
+        # lets track the frame over the subsequent points by multiplying the tracked marker with the compunded homography matrix
         points_on_webcam_image = np.dot(h, points_on_marker_image.T).T
 
-        points_on_marker_image_reshaped = np.array([[[0, 0]], [[300, 0]], [[300, 475]], [[0, 475]]]) # reshaped
+        # to draw we need to reshape the points on the webcam image shape
         points_on_webcam_image_reshaped = np.array([[[points_on_webcam_image[0][0]/points_on_webcam_image[0][2], points_on_webcam_image[0][1]/points_on_webcam_image[0][2]]], [[points_on_webcam_image[1][0]/points_on_webcam_image[1][2], points_on_webcam_image[1][1]/points_on_webcam_image[1][2]]], [[points_on_webcam_image[2][0]/points_on_webcam_image[2][2], points_on_webcam_image[2][1]/points_on_webcam_image[2][2]]], [[points_on_webcam_image[3][0]/points_on_webcam_image[3][2], points_on_webcam_image[3][1]/points_on_webcam_image[3][2]]]]) # de-homogenized and reshaped
-        appendedimage = md.match_and_display(points_on_marker_image_reshaped, points_on_webcam_image_reshaped, marker_img, subsequent)
 
-        cv2.imshow("", appendedimage)
+        # the display function in display.py draws the borders around the images
+        subsequent = md.display(points_on_webcam_image_reshaped, subsequent)
+
+        cv2.imshow("", subsequent)
         key = cv2.waitKey(20)
         if(key == 27):
             break
         if(key == 115):
-            cv2.imwrite("tracked_image.jpg", appendedimage)
+            cv2.imwrite("tracked_image.jpg", subsequent)
         p1 = ps
         gray_first = gray_subsequent
 
