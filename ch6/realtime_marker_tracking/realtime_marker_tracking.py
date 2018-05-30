@@ -1,5 +1,5 @@
 # *****************************************************************************
-# * Filename : sift_lk_realtime_marker.py
+# * Filename : realtime_marker_tracking.py
 # * Date : 27/May/2018
 # * Author : Ram
 # * Email : ramkalath@gmail.com
@@ -11,7 +11,6 @@ import cv2
 import numpy as np
 import sys
 import time
-import display as md
 
 # params for ShiTomasi corner detection
 feature_params = dict(maxCorners = 100,
@@ -23,6 +22,23 @@ feature_params = dict(maxCorners = 100,
 lk_params = dict(winSize  = (15,15),
                  maxLevel = 2,
                  criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+
+# Displays the frame around the tracked image given the points to be drawn
+def display(good_new, img2):
+    (x0, y0) = tuple(np.array(good_new[0][0], int))
+    (x1, y1) = tuple(np.array(good_new[1][0], int))
+    (x2, y2) = tuple(np.array(good_new[2][0], int))
+    (x3, y3) = tuple(np.array(good_new[3][0], int))
+
+    cv2.circle(img2, (x0,y0), 3, (0,0,255), -1) # circling small red dots on the keypoints for easy visiblity
+    cv2.circle(img2, (x1,y1), 3, (0,0,255), -1) # circling small red dots on the keypoints for easy visiblity
+    cv2.circle(img2, (x2,y2), 3, (0,0,255), -1) # circling small red dots on the keypoints for easy visiblity
+    cv2.circle(img2, (x3,y3), 3, (0,0,255), -1) # circling small red dots on the keypoints for easy visiblity
+    cv2.line(img2, (x0, y0),(x1, y1), (255,0,0), 3) # drawing lines between the matching points
+    cv2.line(img2, (x1, y1),(x2, y2), (255,0,0), 3) # drawing lines between the matching points
+    cv2.line(img2, (x2, y2),(x3, y3), (255,0,0), 3) # drawing lines between the matching points
+    cv2.line(img2, (x3, y3),(x0, y0), (255,0,0), 3) # drawing lines between the matching points
+    return img2
 
 if __name__ == "__main__":
     img_path = sys.argv
@@ -95,7 +111,7 @@ if __name__ == "__main__":
         points_on_webcam_image_reshaped = np.array([[[points_on_webcam_image[0][0]/points_on_webcam_image[0][2], points_on_webcam_image[0][1]/points_on_webcam_image[0][2]]], [[points_on_webcam_image[1][0]/points_on_webcam_image[1][2], points_on_webcam_image[1][1]/points_on_webcam_image[1][2]]], [[points_on_webcam_image[2][0]/points_on_webcam_image[2][2], points_on_webcam_image[2][1]/points_on_webcam_image[2][2]]], [[points_on_webcam_image[3][0]/points_on_webcam_image[3][2], points_on_webcam_image[3][1]/points_on_webcam_image[3][2]]]]) # de-homogenized and reshaped
 
         # the display function in display.py draws the borders around the images
-        subsequent = md.display(points_on_webcam_image_reshaped, subsequent)
+        subsequent = display(points_on_webcam_image_reshaped, subsequent)
 
         cv2.imshow("", subsequent)
         key = cv2.waitKey(20)
