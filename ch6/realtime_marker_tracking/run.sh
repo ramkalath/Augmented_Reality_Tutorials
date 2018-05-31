@@ -1,1 +1,1 @@
-python ./sift_lk_realtime_marker.py marker.jpg
+python ./realtime_marker_tracking.py marker.jpg
