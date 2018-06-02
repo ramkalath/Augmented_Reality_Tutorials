@@ -6,17 +6,18 @@
  * Detailed Description : To compile type 'make' and to run type 'run.sh'
  *****************************************************************************/
 
+// all the imports
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <opencv2/opencv.hpp>
-#include <aruco/aruco.h>
+#include <aruco/aruco.h> // include the aruco import
 #include <strings.h>
 #include <vector>
 
 int main(int argc, char **argv)
 {
-	int cam_device_no, key, size, row, column;
+	int cam_device_no, size;
 	double ThreshParam1, ThreshParam2;
 	float probDetect,  markersize;
 
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
 			boarddetect.getDetectedMarkers()[i].draw(frame, cv::Scalar(0, 0, 255), 1);
 
 		cv::imshow("", frame);
-		key = cv::waitKey(10);
+		int key = cv::waitKey(10);
 		if(key==27)
 			break;
 		else if(key==115)
