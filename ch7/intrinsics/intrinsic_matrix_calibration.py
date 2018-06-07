@@ -4,7 +4,7 @@
 # * Author : Ram
 # * Email : ramkalath@gmail.com
 # * Breif Description : implements camera calibration with opencv
-# * Detailed Description : to run this code, type 'python chessboard_detection.py'. Find the chessboard image in ch6/chessboard_detection/chessboard_image.png
+# * Detailed Description : to run this code, type './run.sh'. Find the chessboard image in ch6/chessboard_detection/chessboard_image.png
 # *****************************************************************************
 
 import numpy as np
