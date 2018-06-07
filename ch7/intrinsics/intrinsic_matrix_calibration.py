@@ -14,8 +14,12 @@ criteria = ( cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT, 30, 0.1 )
 
 if __name__ == "__main__":
     cap = cv2.VideoCapture(0)
-    pattern_size = (9, 6)
 
+    pattern_size = (9, 6) # number of corners in the chessboard
+
+    # we need to describe some points that we are going to track
+    # we need something like [[0, 0, 0], [1, 0, 0] . . . .  [cols-1, 0, 0], [0, 1, 0], [1, 1, 0] . . . . [cols-1, rows-1, 0]]
+    # we compile each col separately and stack them together
     col0 = np.tile(np.arange(0, pattern_size[0]), pattern_size[1])
     col1 = np.reshape((np.ones((pattern_size[0], pattern_size[1]))* np.arange(pattern_size[1])).T, (1, pattern_size[0]*pattern_size[1] ))[0]
     col2 = np.zeros(pattern_size[1]*pattern_size[0])
