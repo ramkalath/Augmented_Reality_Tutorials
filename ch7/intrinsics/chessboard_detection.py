@@ -45,7 +45,7 @@ if __name__ == "__main__":
         if(key==27):
             break
 
-    flag, camera_matrix, dist_coefs, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, (w, h)) # camera_matrix yeilds the intrinsics, dist_coeffs correct radial distortions.
-    print "camera matrix:\n", camera_matrix
+    flag, intrinsic_matrix, dist_coefs, rvecs, tvecs = cv2.calibrateCamera(obj_points, img_points, (w, h)) # camera_matrix yeilds the intrinsics, dist_coeffs correct radial distortions.
+    print "intrinsic matrix:\n", intrinsic_matrix
     print "distortion coefficients: ", dist_coefs.ravel()
     cv2.destroyAllWindows()
