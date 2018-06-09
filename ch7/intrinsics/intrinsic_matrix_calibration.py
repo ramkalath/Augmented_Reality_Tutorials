@@ -1,6 +1,6 @@
 # *****************************************************************************
-# * Filename : <file_name>
-# * Date : <date>
+# * Filename : intrinsic_matrix_calibration.py
+# * Date : 7/June/2018
 # * Author : Ram
 # * Email : ramkalath@gmail.com
 # * Breif Description : implements camera calibration with opencv
