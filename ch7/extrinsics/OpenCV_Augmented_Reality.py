@@ -39,9 +39,17 @@ if __name__ == "__main__":
             rvecs, tvecs, inliers = cv2.solvePnPRansac(pattern_points, corners, intrinsic_matrix, dist_coefs) # we use solvePnP() method to calculate the extrinsics -> rvecs and tvecs
             rotation_matrix = cv2.Rodrigues(rvecs)[0] # then we convert the quaternions rvecs into the rotation matrix
             extrinsic_matrix =  np.concatenate((rotation_matrix, tvecs), axis = 1) # tvecs can be appended onto the rotation matrix
+            camera_matrix = np.dot(intrinsic_matrix, extrinsic_matrix) # finally we compute the camera_matrix by combining the intrinsic and extrinsic matrix
+            homog_coord = np.dot(axis1, camera_matrix.T).T # Then we calculate the projection of 3D points on the image plane of the camera. Output is in homogeneous coordinate system
+            x = homog_coord[0]/homog_coord[-1] # x /
+            y = homog_coord[1]/homog_coord[-1] # and y carries the coordinates for the four points of the axes
 
-            print extrinsic_matrix # print the extrinsic matrix
+            # we then draw those ---------------------------------------------------------
+            cv2.line(frame, (int(x[0]), int(y[0])), (int(x[1]), int(y[1])), (255,0,0), 5)
+            cv2.line(frame, (int(x[0]), int(y[0])), (int(x[2]), int(y[2])), (0,255,0), 5)
+            cv2.line(frame, (int(x[0]), int(y[0])), (int(x[3]), int(y[3])), (0,0,255), 5)
 
+        # and finally display
         cv2.imshow("extrinsic", frame)
         key = cv2.waitKey(20)
         if(key==27):
