@@ -10,7 +10,6 @@
 import numpy as np
 import cv2
 import yaml
-import time
 
 criteria = ( cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT, 30, 0.1 )
 
