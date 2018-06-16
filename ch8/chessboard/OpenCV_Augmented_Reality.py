@@ -3,7 +3,7 @@
 # * Date : 11/June/2018
 # * Author : Ram
 # * Email : ramkalath@gmail.com
-# * Breif Description : Implements calculation of extrinsic matrix with opencv
+# * Breif Description : Implements AR with OpenCV chessboard
 # * Detailed Description : to run this code type './run.sh'. Find the chessboard image in ch6/chessboard_detection/chessboard_image.png
 # *****************************************************************************
 
@@ -54,4 +54,6 @@ if __name__ == "__main__":
         key = cv2.waitKey(20)
         if(key==27):
             break
+        if(key==115):
+            cv2.imwrite("AR_frame.jpg", frame)
     cv2.destroyAllWindows()
