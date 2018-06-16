@@ -21,7 +21,6 @@ int main(int argc, char **argv)
 	int cam_device_no, size;
 	double ThreshParam1 = 10, ThreshParam2 = 10;
 	float probDetect,  markersize;
-
 	
 	cv::Mat frame; // Mat is the data structure that holds an image in opencv-cpp
 	aruco::BoardConfiguration boardconfig; 

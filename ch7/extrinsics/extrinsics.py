@@ -40,7 +40,7 @@ if __name__ == "__main__":
             rotation_matrix = cv2.Rodrigues(rvecs)[0] # then we convert the quaternions rvecs into the rotation matrix
             extrinsic_matrix =  np.concatenate((rotation_matrix, tvecs), axis = 1) # tvecs can be appended onto the rotation matrix
 
-            print extrinsic_matrix # print the extrinsic matrix
+            print "extrinsic_matrix = ", extrinsic_matrix # print the extrinsic matrix
 
         cv2.imshow("extrinsic", frame)
         key = cv2.waitKey(20)

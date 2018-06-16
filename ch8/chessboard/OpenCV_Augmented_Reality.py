@@ -50,7 +50,7 @@ if __name__ == "__main__":
             cv2.line(frame, (int(x[0]), int(y[0])), (int(x[3]), int(y[3])), (0,0,255), 5)
 
         # and finally display
-        cv2.imshow("extrinsic", frame)
+        cv2.imshow("AR_frame", frame)
         key = cv2.waitKey(20)
         if(key==27):
             break
