@@ -6,11 +6,10 @@ LIBS = `pkg-config --libs opencv` -laruco
 
 # enter filename without extension
 FILENAME1 = main
-FILENAME2 = cube
-FILENAME3 = marker_detect
+FILENAME2 = marker_detect
 
-all: $(FILENAME3).cpp $(FILENAME2).cpp $(FILENAME1).cpp
-	@$(CC) -g $(INCLUDE) $(FILENAME3).cpp $(FILENAME2).cpp $(FILENAME1).cpp -o $(FILENAME1) $(LIBS)
+all: $(FILENAME2).cpp $(FILENAME1).cpp
+	@$(CC) -g $(INCLUDE) $(FILENAME2).cpp $(FILENAME1).cpp -o $(FILENAME1) $(LIBS)
 
 run:
 	@./run.sh
