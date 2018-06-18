@@ -24,11 +24,11 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
 int main()
 {
-	glfwInit();		// Initialize GLFW
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);		// Describe the major version of OpenGL
+    glfwInit();		// Initialize GLFW
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);		// Describe the major version of OpenGL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);		// Describe the minor version of OpenGL
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);		// Use the core profile
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);		// make sure the window is not resizable
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);		// make sure the window is not resizable
 
     GLFWwindow *window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "My first GLFW window", nullptr, nullptr);		// create a window of size 800, 600
     if(window == nullptr)
