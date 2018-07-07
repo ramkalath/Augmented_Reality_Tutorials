@@ -16,7 +16,7 @@ const GLchar* fragmentShaderSource = "#version 330 core\n"
                                      "out vec4 color;\n"
                                      "void main()\n"
                                      "{\n"
-                                     "color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+                                     "color = vec4(0.85f, 0.26f, 0.22f, 1.0f);\n"
                                      "}\n\0";
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
@@ -128,7 +128,7 @@ int main()
         // glfw main loop ************************************************
         glfwPollEvents();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Draw our first triangle
