@@ -105,20 +105,27 @@ int main()
             glDeleteShader(fs);
     //****************************************************************************************
     // let us now write code for the actual data points for the triangle and add bind it with a VBO. VAO is then used to encapsulate VBO
-    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f,   /* left */
-                            0.5f, -0.5f, 0.0f,   /* right */
-                            0.0f,  0.5f, 0.0f    /* Top */     };
+    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f,   /* left bottom */
+                           -0.5f,  0.5f, 0.0f,   /* left top */
+                            0.5f,  0.5f, 0.0f,   /* right top */     
+							0.5f, -0.5f, 0.0f};  /* right bottom */
 
-    GLuint VBO, VAO;
+	GLuint indices[] = {0, 1, 3, 1, 2, 3};
+
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
     glBindVertexArray(VAO); // Bind vertex array objects first before VBOs
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GL_FLOAT), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
     glBindVertexArray(0);               // unbinding VAO
 
     //**********************************************************************************************
@@ -134,7 +141,10 @@ int main()
         // Draw our first triangle
         glUseProgram(program);
         glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
 

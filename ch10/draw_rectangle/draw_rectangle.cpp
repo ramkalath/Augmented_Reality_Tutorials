@@ -1,3 +1,10 @@
+/*****************************************************************************
+ * Author : Ram
+ * Date : 12/July/2018
+ * Email : ramkalath@gmail.com
+ * Breif Description : Draws a rectangle.
+ * Detailed Description :
+ *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -104,10 +111,14 @@ int main()
             glDeleteShader(vs);
             glDeleteShader(fs);
     //****************************************************************************************
-    // let us now write code for the actual data points for the triangle and add bind it with a VBO. VAO is then used to encapsulate VBO
-    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f,   /* left */
-                            0.5f, -0.5f, 0.0f,   /* right */
-                            0.0f,  0.5f, 0.0f    /* Top */     };
+    // let us now write code for the actual data points for the rectangle and add bind it with a VBO. VAO is then used to encapsulate VBO
+    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f,   /* left bottom */
+                           -0.5f,  0.5f, 0.0f,   /* left top */
+							0.5f, -0.5f, 0.0f,   /* right bottom */
+
+                           -0.5f,  0.5f, 0.0f,   /* left top */
+                            0.5f,  0.5f, 0.0f,   /* right top */     
+							0.5f, -0.5f, 0.0f};  /* right bottom */
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -118,7 +129,6 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GL_FLOAT), (GLvoid*)0);
     glEnableVertexAttribArray(0);
-
     glBindVertexArray(0);               // unbinding VAO
 
     //**********************************************************************************************
@@ -131,18 +141,18 @@ int main()
         glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw our first triangle
+        // Draw a rectangle
         glUseProgram(program);
         glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glBindVertexArray(0);
-
         glfwSwapBuffers(window);
      }
     // Deleting the used resources*****************************************
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+	glDeleteShader(program);
     //****************************************************************************
     glfwTerminate();
     return 0;
