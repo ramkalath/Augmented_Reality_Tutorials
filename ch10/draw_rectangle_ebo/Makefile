@@ -7,7 +7,7 @@ INCLUDE = -I/usr/local/include/GLFW
 LIBS = -lglfw3 -lm -lGLEW -lGL -lGLU -ldl -lXinerama -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -lpthread
 
 # enter filename without extension
-FILENAME = draw_rectangle
+FILENAME = draw_rectangle_ebo
 
 all: $(FILENAME).cpp
 	@$(CC) $(CFLAGS) $(INCLUDE) $(FILENAME).cpp -o $(FILENAME) $(LIBS)

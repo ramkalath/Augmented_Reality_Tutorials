@@ -1,3 +1,10 @@
+/*****************************************************************************
+ * Author : Ram
+ * Date : 12/July/2018
+ * Email : ramkalath@gmail.com
+ * Breif Description : Draws a rectangle. Concept of Element buffer objects used.
+ * Detailed Description :
+ *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -104,7 +111,7 @@ int main()
             glDeleteShader(vs);
             glDeleteShader(fs);
     //****************************************************************************************
-    // let us now write code for the actual data points for the triangle and add bind it with a VBO. VAO is then used to encapsulate VBO
+    // let us now write code for the actual data points for the rectangle and add bind it with a VBO. VAO is then used to encapsulate VBO
     GLfloat vertices[] = { -0.5f, -0.5f, 0.0f,   /* left bottom */
                            -0.5f,  0.5f, 0.0f,   /* left top */
                             0.5f,  0.5f, 0.0f,   /* right top */     
@@ -138,16 +145,12 @@ int main()
         glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw our first triangle
+        // Draw a rectangle
         glUseProgram(program);
         glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
-
         glfwSwapBuffers(window);
      }
     // Deleting the used resources*****************************************
