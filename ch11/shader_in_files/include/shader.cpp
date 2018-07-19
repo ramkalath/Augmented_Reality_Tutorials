@@ -52,15 +52,15 @@ GLuint compile_shader(std::string shader_type, const char* code)
 // constructor --------------------------------------------------------------------------
 Shader::Shader(const char* vs_path, const char* fs_path)
 {
-	bool f_fail;
+	bool s_fail;
 
 	// get the vertex shader code
-	GLchar* vs_code = get_program_from_file(&f_fail, vs_path);
-	if(f_fail) std::cerr << "ERROR: VERTEX SHADER FILE COULD NOT BE OPENED" << std::endl;
+	const GLchar* vs_code = get_program_from_file(&s_fail, vs_path);
+	if(s_fail) std::cerr << "ERROR: VERTEX SHADER FILE COULD NOT BE OPENED" << std::endl;
 
 	// get the fragment shader code
-	const GLchar* fs_code = get_program_from_file(&f_fail, fs_path);
-	if(f_fail) std::cerr << "ERROR: FRAGMENT SHADER FILE COULD NOT BE OPENED" << std::endl; 
+	const GLchar* fs_code = get_program_from_file(&s_fail, fs_path);
+	if(s_fail) std::cerr << "ERROR: FRAGMENT SHADER FILE COULD NOT BE OPENED" << std::endl; 
 
 	 //compile vs and fs --------------------------------------------
 	GLuint vs = compile_shader("VERTEX", vs_code);
@@ -85,6 +85,8 @@ Shader::Shader(const char* vs_path, const char* fs_path)
 
 	//---------------------------------------------------------------
     // Delete shaders after compilation
+	delete(vs_code);
+	delete(fs_code);
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 }
