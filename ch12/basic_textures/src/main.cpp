@@ -10,6 +10,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "../include/shader.h"
+#include <SOIL.h>
 
 using namespace std;
 
@@ -55,10 +56,10 @@ int main()
 
     //----------------------------------------------------------------------------------------
     // let us now write code for the actual data points for the triangle and add bind it with a VBO. VAO is then used to encapsulate VBO
-							// vertex pos        vertex colors
-    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // left bottom
-							0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,// right bottom
-							0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f};  // top
+							// vertex pos        texture coords
+    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // left bottom
+							0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// right bottom
+							0.0f,  0.5f, 0.0f, 0.5f, 1.0f};  // top
 
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -69,16 +70,35 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// attribute 0 vertex positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GL_FLOAT), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)0);
     glEnableVertexAttribArray(0);
 
-	// attribute 1 vertex colors
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
+	// attribute 1 texture_coordinates
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);               // unbinding VAO
-
     //---------------------------------------------------------------------------------------
+	// textures
+	GLuint minion_texture; // create a texture object; just like vao, vbo, ebo etc
+	glGenTextures(1, &minion_texture); // generate textures
+	glBindTexture(GL_TEXTURE_2D, minion_texture); // Bind texture; all usual procedure
+
+	// what kind of wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// interpolation type
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// actual loading of image
+	int width, height;
+	unsigned char* image = SOIL_load_image("./resources/minion.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image); // convert image to texture
+	glGenerateMipmap(GL_TEXTURE_2D); // generate mipmap
+	SOIL_free_image_data(image); // free image data from memory
+	glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
+
     // Game Loop ---------------------------------------------------------
     while(!glfwWindowShouldClose(window))
     {
@@ -87,6 +107,11 @@ int main()
 
         glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+		// Binding our texture
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, minion_texture);
+		glUniform1i(glGetUniformLocation(our_shader.program, "ourTexture1"), 0);
 
         // Draw a rectangle
         glUseProgram(our_shader.program);
