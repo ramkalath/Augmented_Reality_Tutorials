@@ -1,3 +1,10 @@
+/*****************************************************************************
+ * Author : Ram
+ * Date : 2/August/2018
+ * Email : ramkalath@gmail.com
+ * Breif Description : glm basics
+ * Detailed Description : Introduction to glm basics
+ *****************************************************************************/
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

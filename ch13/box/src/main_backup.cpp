@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 28/July/2018
+ * Date : 20/July/2018
  * Email : ramkalath@gmail.com
- * Breif Description : mixture of two textures
- * Detailed Description : Implements a mixture of two textures.
+ * Breif Description : multicolored triangle
+ * Detailed Description : This program creates a multicolored triangle
  *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC
@@ -55,19 +55,71 @@ int main()
 	Shader our_shader("./shaders/vertex_shader.vert", "./shaders/fragment_shader.frag");
 
     //----------------------------------------------------------------------------------------
-    // let us now write code for the actual data points for the triangle and add bind it with a VBO. VAO is then used to encapsulate VBO
+    // Cube has 6 faces and each face has 4 vertices
 							// vertex pos        texture coords
-    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // left bottom
-							0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// right bottom
-							0.0f,  0.5f, 0.0f, 0.5f, 1.0f};  // top
+	//GLfloat vertices[] = 
+     //{
+		//-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		//-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         //0.5f, -0.5f, -0.5f,  1.0f, 0.0f
+         //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f
+	
+        //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         //0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         //0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         //0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        //-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-    GLuint VBO, VAO;
+        //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        //-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+           //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         //0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         //0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         //0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         //0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         //0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         //0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        //-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+           //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	//};
+
+    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   /* left bottom */
+                           -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,  /* left top */
+                            //0.5f,  0.5f, 0.0f, 1.0f, 1.0f,  [> right top <]     
+							0.5f, -0.5f, 0.0f, 1.0f, 0.0f};  /* right bottom */
+
+	GLfloat indices[] = {0, 1, 3, 1, 2, 3};//, 4, 5, 6, 5, 6, 7, 8, 9, 10, 9, 10, 11, 12, 13, 14, 13, 14, 15, 16, 17, 18, 17, 18, 19, 20, 21, 22, 21, 22, 23};
+
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
     glBindVertexArray(VAO); // Bind vertex array objects first before VBOs
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// attribute 0 vertex positions
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)0);
@@ -141,7 +193,8 @@ int main()
         // Draw a rectangle
         glUseProgram(our_shader.program);
         glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
         glfwSwapBuffers(window);

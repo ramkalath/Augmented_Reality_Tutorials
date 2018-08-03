@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 20/July/2018
+ * Date : 27/July/2018
  * Email : ramkalath@gmail.com
- * Breif Description : multicolored triangle
- * Detailed Description : This program creates a multicolored triangle
+ * Breif Description : basic textures
+ * Detailed Description : implementing basic textures
  *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC

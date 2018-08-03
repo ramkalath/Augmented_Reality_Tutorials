@@ -2,8 +2,8 @@
  * Author : Ram
  * Date : 18/July/2018
  * Email : ramkalath@gmail.com
- * Breif Description : shader in files and abstracted code for compilation and linking
- * Detailed Description : This program abstracts the code for shader, its compilation and linking by including them in a shader.h and shader.cpp file
+ * Breif Description : implements uniforms to pass green color value
+ * Detailed Description : implements uniforms to pass green color value. The tone of green changes with time.
  *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC

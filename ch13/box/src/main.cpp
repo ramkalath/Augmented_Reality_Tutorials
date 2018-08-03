@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 28/July/2018
+ * Date : 3/August/2018
  * Email : ramkalath@gmail.com
- * Breif Description : mixture of two textures
- * Detailed Description : Implements a mixture of two textures.
+ * Breif Description : Box
+ * Detailed Description : This program creates a wooden crate with batman insignia
  *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC
@@ -12,14 +12,11 @@
 #include "../include/shader.h"
 #include <SOIL.h>
 
-using namespace std;
-
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
     // When a user presses the escape key, we set the WindowShouldClose property to true, thus closing the application
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
-        cout << "Window is closing because u pressed the ESC key" << endl;
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
 }
@@ -36,7 +33,7 @@ int main()
     GLFWwindow *window = glfwCreateWindow(800, 600, "Mixture of Textures", nullptr, nullptr);
     if(window == nullptr)
     {
-        cout << "Failed to create a GLFW window" << endl;
+		std::cout << "Failed to create a GLFW window" << std::endl;
         glfwTerminate();
         return -1;
     }
@@ -46,7 +43,7 @@ int main()
     glewExperimental = GL_TRUE;
     if(glewInit() != GLEW_OK)
     {
-        cout << "Failed to initialize GLEW" << endl;
+		std::cout << "Failed to initialize GLEW" << std::endl;
         return -1;
     }
     glViewport(0, 0, 800, 600);
@@ -55,19 +52,58 @@ int main()
 	Shader our_shader("./shaders/vertex_shader.vert", "./shaders/fragment_shader.frag");
 
     //----------------------------------------------------------------------------------------
-    // let us now write code for the actual data points for the triangle and add bind it with a VBO. VAO is then used to encapsulate VBO
+    // Cube has 6 faces and each face has 4 vertices
 							// vertex pos        texture coords
-    GLfloat vertices[] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // left bottom
-							0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// right bottom
-							0.0f,  0.5f, 0.0f, 0.5f, 1.0f};  // top
+    GLfloat vertices[] = {			// Front face
+						   -0.5f, -0.5f,  0.5f, 0.0f, 0.0f, // left bottom        0
+							0.5f, -0.5f,  0.5f, 1.0f, 0.0f, // right bottom       1
+						   -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, // left top           2
+							0.5f,  0.5f,  0.5f, 1.0f, 1.0f, // right top          3
 
-    GLuint VBO, VAO;
+									// back face
+						   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // left bottom        4
+							0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // right bottom       5
+						   -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // left top           6
+							0.5f,  0.5f, -0.5f, 1.0f, 1.0f, // right top          7
+
+									// left side face
+						   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // left bottom        8
+						   -0.5f, -0.5f,  0.5f, 1.0f, 0.0f, // right bottom       9
+						   -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // left top           10
+						   -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, // right top          11
+
+						   			// right side face
+						    0.5f, -0.5f,  0.5f, 0.0f, 0.0f, // left bottom        12
+						    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // right bottom       13
+						    0.5f,  0.5f,  0.5f, 0.0f, 1.0f, // left top           14
+						    0.5f,  0.5f, -0.5f, 1.0f, 1.0f, // right top          15
+
+									// bottom face
+						   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // left bottom        16
+						    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // right bottom       17
+						   -0.5f, -0.5f,  0.5f, 0.0f, 1.0f, // left top           18
+						    0.5f, -0.5f,  0.5f, 1.0f, 1.0f, // right top          19
+
+									// top face
+						   -0.5f,  0.5f,  0.5f, 0.0f, 0.0f, // left bottom        20
+						    0.5f,  0.5f,  0.5f, 1.0f, 0.0f, // right bottom       21
+						   -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // left top           22
+						    0.5f,  0.5f, -0.5f, 1.0f, 1.0f  // right top          23
+	};
+
+	GLuint indices[] = {0, 1, 2, 1, 2, 3, 4, 5, 6, 5, 6, 7, 8, 9, 10, 9, 10, 11, 12, 13, 14, 13, 14, 15, 16, 17, 18, 17, 18, 19, 20, 21, 22, 21, 22, 23};
+
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
     glBindVertexArray(VAO); // Bind vertex array objects first before VBOs
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// attribute 0 vertex positions
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)0);
@@ -79,10 +115,10 @@ int main()
 
     glBindVertexArray(0);               // unbinding VAO
     //---------------------------------------------------------------------------------------
-	// Texture - arch
-	GLuint arch_texture; // create a texture object; just like vao, vbo, ebo etc
-	glGenTextures(1, &arch_texture); // generate textures
-	glBindTexture(GL_TEXTURE_2D, arch_texture); // Bind texture; all usual procedure
+	// Texture - batman
+	GLuint batman_texture; // create a texture object; just like vao, vbo, ebo etc
+	glGenTextures(1, &batman_texture); // generate textures
+	glBindTexture(GL_TEXTURE_2D, batman_texture); // Bind texture; all usual procedure
 
 	// what kind of wrapping
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -93,7 +129,7 @@ int main()
 
 	// actual loading of image
 	int width, height;
-	unsigned char* image = SOIL_load_image("./resources/arch.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	unsigned char* image = SOIL_load_image("./resources/batman.jpg", &width, &height, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image); // convert image to texture
 	glGenerateMipmap(GL_TEXTURE_2D); // generate mipmap
 	SOIL_free_image_data(image); // free image data from memory
@@ -130,8 +166,8 @@ int main()
 
 		// Binding our first texture
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, arch_texture);
-		glUniform1i(glGetUniformLocation(our_shader.program, "arch_texture"), 0);
+		glBindTexture(GL_TEXTURE_2D, batman_texture);
+		glUniform1i(glGetUniformLocation(our_shader.program, "batman_texture"), 0);
 
 		// Binding our second texture
 		glActiveTexture(GL_TEXTURE1);
@@ -141,7 +177,7 @@ int main()
         // Draw a rectangle
         glUseProgram(our_shader.program);
         glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
         glfwSwapBuffers(window);
