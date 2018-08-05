@@ -1,229 +1,199 @@
 /*****************************************************************************
+ * Filename : main.cpp from 12_colors_1
+ * Date : 8/Dec/2017
  * Author : Ram
- * Date : 3/August/2018
  * Email : ramkalath@gmail.com
- * Breif Description : Model matrix on the box to make it larger and to impose a rotation
- * Detailed Description : We explore a model matrix in this section that resizes the box and rotates it as its being kept in the world space.
+ * Breif Description : trial 1 colors
+ * Detailed Description : this program creates a cube with coral colour and a white coloured light
+ * Last Modified : 8/Dec/2017
  *****************************************************************************/
-#include <iostream>
+
 #define GLEW_STATIC
 #include <GL/glew.h>
+
+// GLFW
 #include <GLFW/glfw3.h>
+
+#include <iostream>
 #include "../include/shader.h"
-#include <SOIL.h>
+#include "SOIL.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <math.h>
+#include <vector>
+
+using namespace std;
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
-    // When a user presses the escape key, we set the WindowShouldClose property to true, thus closing the application
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
+	// When the user presses the escape key, we set the window should close property to true, and close the application.
+	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
 }
+
+int width_screen = 800, height_screen = 600;
 
 int main()
 {
-    // initializing glfw -------------------------------------------------------------------
+	// glfw stuff ====================================================================
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "rotating box", nullptr, nullptr);
-    if(window == nullptr)
-    {
-		std::cout << "Failed to create a GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
+    GLFWwindow *window = glfwCreateWindow(width_screen, height_screen, "LearnOpenGL", nullptr, nullptr);
     glfwMakeContextCurrent(window);
-
-    // initializing glew -------------------------------------------------------------------
-    glewExperimental = GL_TRUE;
-    if(glewInit() != GLEW_OK)
-    {
-		std::cout << "Failed to initialize GLEW" << std::endl;
-        return -1;
-    }
-	glEnable(GL_DEPTH_TEST);
-
-    glViewport(0, 0, 800, 600);
     glfwSetKeyCallback(window, key_callback);
 
-	Shader our_shader("./shaders/vertex_shader.vert", "./shaders/fragment_shader.frag");
-
-    //----------------------------------------------------------------------------------------
-    // Cube has 6 faces and each face has 4 vertices
-							// vertex pos        texture coords
-    GLfloat vertices[] = {			// Front face
-						   -0.5f, -0.5f,  0.5f, 0.0f, 0.0f, // left bottom        0
-							0.5f, -0.5f,  0.5f, 1.0f, 0.0f, // right bottom       1
-						   -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, // left top           2
-							0.5f,  0.5f,  0.5f, 1.0f, 1.0f, // right top          3
-
-									// back face
-						   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // left bottom        4
-							0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // right bottom       5
-						   -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // left top           6
-							0.5f,  0.5f, -0.5f, 1.0f, 1.0f, // right top          7
-
-									// left side face
-						   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // left bottom        8
-						   -0.5f, -0.5f,  0.5f, 1.0f, 0.0f, // right bottom       9
-						   -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // left top           10
-						   -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, // right top          11
-
-						   			// right side face
-						    0.5f, -0.5f,  0.5f, 0.0f, 0.0f, // left bottom        12
-						    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // right bottom       13
-						    0.5f,  0.5f,  0.5f, 0.0f, 1.0f, // left top           14
-						    0.5f,  0.5f, -0.5f, 1.0f, 1.0f, // right top          15
-
-									// bottom face
-						   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // left bottom        16
-						    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // right bottom       17
-						   -0.5f, -0.5f,  0.5f, 0.0f, 1.0f, // left top           18
-						    0.5f, -0.5f,  0.5f, 1.0f, 1.0f, // right top          19
-
-									// top face
-						   -0.5f,  0.5f,  0.5f, 0.0f, 0.0f, // left bottom        20
-						    0.5f,  0.5f,  0.5f, 1.0f, 0.0f, // right bottom       21
-						   -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // left top           22
-						    0.5f,  0.5f, -0.5f, 1.0f, 1.0f  // right top          23
-	};
-
-	GLuint indices[] = {0, 1, 2, 1, 2, 3, 4, 5, 6, 5, 6, 7, 8, 9, 10, 9, 10, 11, 12, 13, 14, 13, 14, 15, 16, 17, 18, 17, 18, 19, 20, 21, 22, 21, 22, 23};
-
-    GLuint VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO); // Bind vertex array objects first before VBOs
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// attribute 0 vertex positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-
-	// attribute 1 texture_coordinates
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0);               // unbinding VAO
-    //---------------------------------------------------------------------------------------
-	// Texture - batman
-	GLuint batman_texture; // create a texture object; just like vao, vbo, ebo etc
-	glGenTextures(1, &batman_texture); // generate textures
-	glBindTexture(GL_TEXTURE_2D, batman_texture); // Bind texture; all usual procedure
-
-	// what kind of wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// interpolation type
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// actual loading of image
-	int width, height;
-	unsigned char* image = SOIL_load_image("./resources/batman.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image); // convert image to texture
-	glGenerateMipmap(GL_TEXTURE_2D); // generate mipmap
-	SOIL_free_image_data(image); // free image data from memory
-	glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
-
-    //---------------------------------------------------------------------------------------
-	// Texture - wood
-	GLuint wood_texture; // create a texture object; just like vao, vbo, ebo etc
-	glGenTextures(1, &wood_texture); // generate textures
-	glBindTexture(GL_TEXTURE_2D, wood_texture); // Bind texture; all usual procedure
-
-	// what kind of wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// interpolation type
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// actual loading of image
-	image = SOIL_load_image("./resources/wood.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image); // convert image to texture
-	glGenerateMipmap(GL_TEXTURE_2D); // generate mipmap
-	SOIL_free_image_data(image); // free image data from memory
-	glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
-    //---------------------------------------------------------------------------------------
-	// Let us create a basic model matrix
-	// notice the first 3 elements of the leading diagonal is 0.5 which reduces the size of the crate along each axis by half
-	glm::mat4 half_size_matrix = {0.5f, 0.0f, 0.0f, 0.0f,
-								  0.0f, 0.5f, 0.0f, 0.0f,
-								  0.0f, 0.0f, 0.5f, 0.0f,
-								  0.0f, 0.0f, 0.0f, 1.0f};
-
-	// find the location of the matrix in the shader
-	GLuint half_size_location = glGetUniformLocation(our_shader.program, "half_size");
-	glUniformMatrix4fv(half_size_location, 1, GL_FALSE, glm::value_ptr(half_size_matrix));
-
-    // Game Loop ---------------------------------------------------------
-    while(!glfwWindowShouldClose(window))
+    if(window == nullptr)
     {
-        // glfw main loop ------------------------------------------------
-        glfwPollEvents();
+    	std::cerr << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+    }
+	glewExperimental = GL_TRUE;
 
-        glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+	if(glewInit() != GLEW_OK)
+	{
+		std::cout << "Failed to initialize GLEW" << std::endl;
+		return -1;
+	}
 
-		// Binding our first texture
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, batman_texture);
-		glUniform1i(glGetUniformLocation(our_shader.program, "batman_texture"), 0);
+	glEnable(GL_DEPTH_TEST);
 
-		// Binding our second texture
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, wood_texture);
-		glUniform1i(glGetUniformLocation(our_shader.program, "wood_texture"), 1);
+	// Viewport dimensions
+	glfwGetFramebufferSize(window, &width_screen, &height_screen);
+	glViewport(0, 0, width_screen, height_screen);
 
-		// half size matrix
-		glm::mat4 half_size_matrix = {1.0f, 0.0f, 0.0f, 0.0f,
-									  0.0f, 1.0f, 0.0f, 0.0f,
-									  0.0f, 0.0f, 1.0f, 0.0f,
-									  0.0f, 0.0f, 0.0f, 1.0f};
+	Shader object_shader("object_vertex_shader.vert", "object_fragment_shader.frag");
+	Shader lamp_shader("lamp_vertex_shader.vert", "lamp_fragment_shader.frag");
+	// ================================================================================
 
-		// find the location of the half_size matrix in the shader
-		GLuint half_size_location = glGetUniformLocation(our_shader.program, "half_size");
-		glUniformMatrix4fv(half_size_location, 1, GL_FALSE, glm::value_ptr(half_size_matrix));
+	// data - vertices ===================================================================
+	GLfloat vertices[] = 
+	 {
+		-0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+	
+		-0.5f, -0.5f,  0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,  
 
-		// Rotation matrix
-		// lets create the rotation matrix
-		float time = glfwGetTime();
-		glm::mat4 rotation_matrix = {1.0f, 0.0f, 0.0f, 0.0f,
-									 0.0f, cos(time), -sin(time), 0.0f,
-									 0.0f, sin(time),  cos(time), 0.0f,
-									 0.0f, 0.0f, 0.0f, 1.0f};
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
 
-		GLuint rotation_matrix_location = glGetUniformLocation(our_shader.program, "rotation");
-		glUniformMatrix4fv(rotation_matrix_location, 1, GL_FALSE, glm::value_ptr(rotation_matrix));
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
 
-        // Draw a rectangle
-        glUseProgram(our_shader.program);
-        glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+		-0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f, -0.5f,  
 
-        glBindVertexArray(0);
-        glfwSwapBuffers(window);
-     }
-    // Deleting the used resources --------------------------------------
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    // --------------------------------------------------------------------------------------
-    glfwTerminate();
+		-0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f, -0.5f  
+	};
+	
+	// ==================================================================================
+	GLuint VBO, VAO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	
+	// Postion Attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0); // Unbind VAO
+	// ==================================================================================
+	GLuint VBO_light, VAO_light;
+    glGenVertexArrays(1, &VAO_light);
+	glGenBuffers(1, &VBO_light);
+
+	glBindVertexArray(VAO_light);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_light);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+	// ==================================================================================
+	glm::vec3 lightPos(3.0f, 0.0f, -3.0f);
+
+	while(!glfwWindowShouldClose(window))
+	{
+		glfwPollEvents();
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+        glUseProgram(object_shader.program);
+		glm::mat4 model, view, projection;
+		
+		model = glm::rotate(model, 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(45.0f, (GLfloat)width_screen/(GLfloat)height_screen, 0.1f, 100.0f);
+
+		glUniformMatrix4fv(glGetUniformLocation(object_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(glGetUniformLocation(object_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(object_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));	
+
+        glUniform3f(glGetUniformLocation(object_shader.program, "objectColor"), 1.0f, 0.5f, 0.31f);
+        glUniform3f(glGetUniformLocation(object_shader.program, "lightColor"), 1.0f, 1.0f, 1.0f);
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+        glUseProgram(lamp_shader.program);
+
+		model = glm::mat4();
+		view = glm::mat4();
+		model = glm::rotate(model, 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(1.0f, 0.0f, -3.0f));
+		model = glm::scale(model, glm::vec3(0.5f));
+
+		glUniformMatrix4fv(glGetUniformLocation(lamp_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(glGetUniformLocation(lamp_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(lamp_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+		glBindVertexArray(VAO_light);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		glfwSwapBuffers(window);
+	}
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+
+	glfwTerminate();
     return 0;
 }
