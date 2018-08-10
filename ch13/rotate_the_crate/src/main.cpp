@@ -178,7 +178,7 @@ int main()
         // glfw main loop ------------------------------------------------
         glfwPollEvents();
 
-        glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
+        glClearColor(0.27f, 0.27f, 0.27f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Binding our first texture

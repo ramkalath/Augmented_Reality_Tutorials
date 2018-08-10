@@ -30,7 +30,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "Mixture of Textures", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Our First Box", nullptr, nullptr);
     if(window == nullptr)
     {
 		std::cout << "Failed to create a GLFW window" << std::endl;
@@ -161,7 +161,7 @@ int main()
         // glfw main loop ------------------------------------------------
         glfwPollEvents();
 
-        glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
+        glClearColor(0.27f, 0.27f, 0.27f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
 		// Binding our first texture

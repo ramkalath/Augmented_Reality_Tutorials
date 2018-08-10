@@ -1,11 +1,10 @@
-// ------------------ Amme Sharanam ------------------------------
-// Program Comment :
-// Usage   : make and ./<filename>
-// Author  : Ramkumar N
-// Date    : 
-// Remarks : 
-// ---------------------------------------------------------------
-
+/*****************************************************************************
+ * Author : Ram
+ * Date : 7/August/2018
+ * Email : ramkalath@gmail.com
+ * Breif Description : view and orthographic projection
+ * Detailed Description : Implements view and orthographic matrix together.
+ *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>
 
@@ -40,7 +39,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "View and Projection Matrices", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "View and orthographic projection Matrices", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 
@@ -171,7 +170,7 @@ int main()
 	{
 		glfwPollEvents();
 
-        glClearColor(0.09f, 0.105f, 0.11f, 1.0f);
+        glClearColor(0.27f, 0.27f, 0.27f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		glActiveTexture(GL_TEXTURE0);
