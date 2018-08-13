@@ -4,7 +4,7 @@ CFLAGS = -std=c++0x -g -Wall
 
 INCLUDE = -I/usr/local/include/GLFW -I/usr/include/SOIL
 
-LIBS = -lglfw3 -lm -lGLEW -lGL -lGLU -lSOIL -ldl -lXinerama -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -lpthread 
+LIBS = -lglfw3 -lm -lGLEW -lGL -lGLU -lSOIL -ldl -lXinerama -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -lpthread
 
 # enter filename without extension
 FILENAME1 = main

@@ -18,6 +18,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <math.h>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "View and orthographic projection Matrices", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "View and perspective projection Matrices", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 
@@ -196,15 +197,21 @@ int main()
 		// defining the view matrix
 		glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-		// for perspective projection - manually defined
-		GLfloat l = -10.5f, r = 10.5f;
-		GLfloat b = -10.5f, t = 10.5f;
-		GLfloat n = -0.1f, f = -100.0f;
+		// defining the perspective projection matrix manually -----------------------------
+		GLfloat angle = 45.0f;
+		GLfloat n = 0.1f, f = 100.0f;
+		GLfloat ar = (GLfloat)width/(GLfloat)height; // aspect ratio
 
-		glm::mat4 projection_perspective = {2*n/(r-l), 0, (r+l)/(r-l), 0,
-											0, 2*n/(t-b), (t+b)/(t-b), 0,
+		glm::mat4 projection_perspective = {1/(ar*tan(angle/2)), 0, 0, 0,
+											0, 1/tan(angle/2), 0, 0,
 											0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
 											0, 0, -1, 0};
+
+		// OpenGL reads matrices in column major order
+		projection_perspective = glm::transpose(projection_perspective);
+
+		// defining perspecive matrix using GLM's perspective function ---------------------
+		//glm::mat4 projection_perspective = glm::perspective(angle, ar, n, f);
 
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));

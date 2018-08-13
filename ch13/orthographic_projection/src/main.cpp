@@ -197,14 +197,21 @@ int main()
 		glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// for orthographic projection - manually defined
-		GLfloat l = -0.5f, r = 0.5f;
-		GLfloat b = -0.5f, t = 0.5f;
-		GLfloat n = -0.1f, f = -100.0f;
+		GLfloat l = -1.5f, r = 1.5f;
+		GLfloat b = -1.5f, t = 1.5f;
+		GLfloat n = 0.1f, f = 100.0f;
 
+		// defining the projection matrix
 		glm::mat4 projection_orthographic = {2/(r-l), 0, 0, -(r+l)/(r-l),
 											 0, 2/(t-b), 0, -(t+b)/(t-b),
 											 0, 0, -2/(f-n), -(f+n)/(f-n),
 											 0, 0, 0, 1};
+
+		// OpenGL reads matrices in column major order
+		projection_orthographic = glm::transpose(projection_orthographic);
+
+		// for orthographic projection - glm fxn
+		//glm::mat4 projection_orthographic = glm::ortho(l, r, b, t, n, f);
 
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
