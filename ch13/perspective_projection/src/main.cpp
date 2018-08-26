@@ -2,8 +2,8 @@
  * Author : Ram
  * Date : 7/August/2018
  * Email : ramkalath@gmail.com
- * Breif Description : view and orthographic projection
- * Detailed Description : Implements view and orthographic matrix together.
+ * Breif Description : view and perspective projection
+ * Detailed Description : Implements view and perspective matrix together.
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>
