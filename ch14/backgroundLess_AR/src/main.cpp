@@ -227,7 +227,6 @@ int main(int argc, char **argv)
 		{
 			frame = cube1.drawcube(frame, intrinsic_matrix, distortion_parameters, marker1.rvecs, marker1.tvecs); // Draws the cube
 			cv::Rodrigues(marker1.rvecs, rot_mat);
-			rot_mat.convertTo(rot_mat, CV_64F);
 
 			// defining the modelveiw matrix based on tvecs and rotation matrix
 			modelview = {rot_mat.at<double>(0,0), rot_mat.at<double>(0,1), rot_mat.at<double>(0,2), marker1.tvecs.at<double>(0),
