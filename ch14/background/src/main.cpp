@@ -76,7 +76,8 @@ int main(int argc, char **argv)
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 
-	Shader our_shader("./shaders/vertex_shader.vert", "./shaders/fragment_shader.frag");
+	Shader crate_shader("./shaders/crate_shader.vert", "./shaders/crate_shader.frag");
+	Shader bg_shader("./shaders/bg_shader.vert", "./shaders/bg_shader.frag");
 
 	// ARUCO marker tracking ---------------------------------------------
 	if(argc < 3) // checks for argument list
@@ -94,8 +95,8 @@ int main(int argc, char **argv)
 	cv::Mat frame;
 	cv::VideoCapture cap(atoi(argv[1]));
 
-	// data - vertices ===================================================================
-	GLfloat vertices[] = 
+	// data - vertices_crate ===================================================================
+	GLfloat vertices_crate[] = 
  	{
     	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
     	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -140,6 +141,17 @@ int main(int argc, char **argv)
    		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 	
+	// vertices and textures of the background
+	GLfloat vertices_bg[] = 
+	{
+		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f
+	};
+
 	// ==================================================================================
 	GLuint VBO, VAO;
 	glGenVertexArrays(1, &VAO);
@@ -148,7 +160,7 @@ int main(int argc, char **argv)
 	glBindVertexArray(VAO);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_crate), vertices_crate, GL_STATIC_DRAW);
 	
 	// Postion Attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)0);
@@ -160,9 +172,29 @@ int main(int argc, char **argv)
 
 	glBindVertexArray(0); // Unbind VAO
 	
+	// ==================================================================================
+	GLuint VBO_bg, VAO_bg;
+	glGenVertexArrays(1, &VAO_bg);
+	glGenBuffers(1, &VBO_bg);
+
+	glBindVertexArray(VAO_bg);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_bg);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_bg), vertices_bg, GL_STATIC_DRAW);
+	
+	// Postion Attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Texture Attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0); // Unbind VAO_bg
+
 	// =================================================================================
 	// Texture Stuff
-	GLuint texture1, texture2;
+	GLuint texture1, texture2, texture_bg;
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 	
@@ -172,9 +204,9 @@ int main(int argc, char **argv)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int width, height;
-	unsigned char* image1 = SOIL_load_image("./resources/wood.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image1);
+	int width_image, height_image;
+	unsigned char* image1 = SOIL_load_image("./resources/wood.jpg", &width_image, &height_image, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_image, height_image, 0, GL_RGB, GL_UNSIGNED_BYTE, image1);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image1);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -188,17 +220,34 @@ int main(int argc, char **argv)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	unsigned char* image2 = SOIL_load_image("./resources/batman.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
+	unsigned char* image2 = SOIL_load_image("./resources/batman.jpg", &width_image, &height_image, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_image, height_image, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image2);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
 	// =======================================================================
-	// scaling matrix for the 3d object
+	// bg texture
+	glGenTextures(1, &texture_bg);
+	glBindTexture(GL_TEXTURE_2D, texture_bg);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	cap >> frame;
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// =======================================================================
+	// crate presets ---------------------------------------------------------
+	// lets make the crate bigger
 	glm::mat4 model;
 	model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 
-	// default values of modelview so that initially when there is no marker, the object is placed behind the camera and it does not show up
+	// default values of modelview
 	glm::mat4 modelview;
 	modelview = glm::translate(modelview, glm::vec3(0.0f, 0.0f, 10.0f));
 
@@ -216,6 +265,12 @@ int main(int argc, char **argv)
 							  0, 0, -1, 0};
 
 	projection_perspective = glm::transpose(projection_perspective);
+
+	// =======================================================================
+	// bg presets ------------------------------------------------------------
+	glm::mat4 model_bg; 
+	model_bg = glm::scale(model_bg, glm::vec3(109.0f, 95.0f, 1.0f));
+	model_bg = glm::translate(model_bg, glm::vec3(0.0f, 0.0f, -99.0f));
 
 	while(!glfwWindowShouldClose(window))
 	{
@@ -243,23 +298,43 @@ int main(int argc, char **argv)
 		cv::imshow("cubeoverlayed", frame);
 		if(cv::waitKey(10)==27) break;  // if close is pressed on opencv window, exit the program
 
+		// -------------------------------------------------------------------------------------
+		// rendering 3d object and textures ----------------------------------------------------
+		glUseProgram(crate_shader.program);
+		glBindVertexArray(VAO);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
-		glUniform1i(glGetUniformLocation(our_shader.program, "batman_texture"), 0);
+		glUniform1i(glGetUniformLocation(crate_shader.program, "batman_texture"), 0);
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
-		glUniform1i(glGetUniformLocation(our_shader.program, "wood_texture"), 1);
-		
-        glUseProgram(our_shader.program);
+		glUniform1i(glGetUniformLocation(crate_shader.program, "wood_texture"), 1);
 
-		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
-		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "projection_perspective"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
+		glUniformMatrix4fv(glGetUniformLocation(crate_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(glGetUniformLocation(crate_shader.program, "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
+		glUniformMatrix4fv(glGetUniformLocation(crate_shader.program, "projection_perspective"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
 
-		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
+		// -------------------------------------------------------------------------------------
+
+		// rendering background object and textures ---------------------------------------------
+		glUseProgram(bg_shader.program);
+		glBindVertexArray(VAO_bg);
+
+		cv::flip(frame, frame, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture_bg);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, frame.data);
+		glUniform1i(glGetUniformLocation(bg_shader.program, "webcam_texture"), 0);
+
+		glUniformMatrix4fv(glGetUniformLocation(bg_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model_bg));
+		glUniformMatrix4fv(glGetUniformLocation(bg_shader.program, "projection_perspective"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+		//--------------------------------------------------------------------------------------
 
 		glfwSwapBuffers(window);
 	}
