@@ -3,7 +3,7 @@
  * Date : 23/August/2018
  * Email : ramkalath@gmail.com
  * Breif Description : background less AR with a crate
- * Detailed Description : implements OpenCV to OpenGL perspective transform translation and thus background less AR with a crate
+ * Detailed Description : implements OpenCV to OpenGL perspective transform translation and thus background less AR with a crate. To run this code, type './run.sh'
  *****************************************************************************/
 
 // usual imports
