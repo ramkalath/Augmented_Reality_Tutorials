@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 28/August/2018
+ * Date : 29/August/2018
  * Email : ramkalath@gmail.com
- * Breif Description : AR with bg as orthographic projection
- * Detailed Description : implements complete AR with the model of a crate. Crate model has perspective projection and background has orthographic projection. To run this file type './run.sh'
+ * Breif Description : AR with bg as perspective projection
+ * Detailed Description : implements complete AR with the model of a crate. Crate object and bg object has perspective projection. To run this file type './run.sh'
  *****************************************************************************/
 
 // usual imports
