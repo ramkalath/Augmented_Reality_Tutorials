@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(width_window, height_window, "View and perspective projection Matrices", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(width_window, height_window, "AR with a crate", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 

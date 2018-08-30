@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(width_window, height_window, "View and perspective projection Matrices", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(width_window, height_window, "AR with a crate", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 
@@ -221,12 +221,12 @@ int main(int argc, char **argv)
 	// background object definitions
 	GLfloat vertices_bg[] = 
 	{
-		-1.0f, -1.0f, 0.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-		 1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-		-1.0f,  1.0f, 0.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
 	};
 
 	// -----------------------------------------------------------------------------------------------
@@ -273,7 +273,7 @@ int main(int argc, char **argv)
 	// transformation presets for the background object (model, view and orthographic projection)
 	glm::mat4 modelview_bg = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -499, 0, 0, 0, 1};
 	modelview_bg = glm::transpose(modelview_bg);
-	modelview_bg = glm::scale(modelview_bg, glm::vec3(499*cx/fx, 499*cy/fy, 0));
+	modelview_bg = glm::scale(modelview_bg, glm::vec3(998*cx/fx, 998*cy/fy, 0));
  	// =========================================================================================================
 
 	while(!glfwWindowShouldClose(window))
