@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
 	// defining the projection matrix
 	float near = 0.1f;
-	float far = 100.0f;
+	float far = 500.0f;
 	float fx = intrinsic_matrix.at<float>(0,0);
 	float fy = intrinsic_matrix.at<float>(1,1);
 	float cx = intrinsic_matrix.at<float>(0,2);
