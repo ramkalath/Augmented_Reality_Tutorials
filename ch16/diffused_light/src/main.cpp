@@ -2,8 +2,8 @@
  * Author : Ram
  * Date : 1/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : colors
- * Detailed Description : Implements colors for an object
+ * Breif Description : diffused lighting
+ * Detailed Description : Implements diffused lighting
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -40,7 +40,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "box_color", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "diffused_lighting", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 
@@ -157,7 +157,7 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
 
 		glUniform3f(glGetUniformLocation(our_shader.program, "light_color"), 1.0f, 1.0f, 1.0f);
-		glUniform3f(glGetUniformLocation(our_shader.program, "box_color"), 0.33f, 0.33f, 0.8f);
+		glUniform3f(glGetUniformLocation(our_shader.program, "box_color"), 0.93f, 0.47f, 0.29f);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
