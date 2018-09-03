@@ -137,6 +137,12 @@ int main()
 	glm::mat4 projection_perspective = {1/(ar*tan(angle/2)), 0, 0, 0, 0, 1/tan(angle/2), 0, 0, 0, 0, -(f+n)/(f-n), -2*f*n/(f-n), 0, 0, -1, 0};
 	projection_perspective = glm::transpose(projection_perspective);
 
+	// ============================================================================================== 
+	// ambient light
+	float ambient_strength = 0.6f;
+	glm::vec3 light_color = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 ambient_light = ambient_strength * light_color;
+
 	while(!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -156,7 +162,7 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
 
-		glUniform3f(glGetUniformLocation(our_shader.program, "light_color"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(our_shader.program, "ambient_light"), ambient_light.x, ambient_light.y, ambient_light.z);
 		glUniform3f(glGetUniformLocation(our_shader.program, "box_color"), 0.93f, 0.47f, 0.29f);
 
 		glBindVertexArray(VAO);

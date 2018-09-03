@@ -65,54 +65,79 @@ int main()
 	glViewport(0, 0, 800, 600);
 
 	Shader our_shader("./shaders/vertex_shader.vert", "./shaders/fragment_shader.frag");
+	Shader lamp_shader("./shaders/lamp_vertex_shader.vert", "./shaders/lamp_fragment_shader.frag");
 
 	// ================================================================================
 	// data - vertices
 	GLfloat vertices[] = 
- 	{
-    	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	
-    	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	{
+		//    vertices            Normals
+		// front -------------------------------
+		// face1, triangle1
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
 
-    	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-   		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		// face1, triangle2
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
 
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		// back ---------------------------------
+		// face2, triangle1
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
 
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		// face2, triangle2
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
 
-    	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-   		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		// right -------------------------------
+		// face3, triangle1
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 
+
+		// face3, triangle2
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 
+
+		// left --------------------------------
+		// face4, triangle1
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 
+
+		// face4, triangle2
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 
+
+		// top ---------------------------------
+		// face5, triangle1
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 
+
+		// face5, triangle2
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 
+
+		// bottom -------------------------------
+		// face6, triangle1
+		-0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 
+		-0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 
+		 0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 
+
+		// face6, triangle2
+		-0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 
+		 0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 
+		 0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 
 	};
-	
 	// ==================================================================================
 	// Defining VAO and VBO
 	GLuint VBO, VAO;
@@ -121,15 +146,33 @@ int main()
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	// Attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)0);
+
+	// vertex attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	// unbind VAO
 	glBindVertexArray(0);
+
+	// ==================================================================================
+	// Defining VAO and VBO for lamp
+	GLuint VBO_lamp, VAO_lamp;
+	glGenVertexArrays(1, &VAO_lamp);
+	glGenBuffers(1, &VBO_lamp);
+	glBindVertexArray(VAO_lamp);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_lamp);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// vertex attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// unbind VAO
+	glBindVertexArray(0);
 	
-	// ============================================================================================== 
+	// ================================================================================= 
 	// defining the perspective projection matrix manually
 	GLfloat angle = 45.0f;
 	GLfloat n = 0.1f, f = 100.0f;
@@ -144,22 +187,42 @@ int main()
         glClearColor(0.27f, 0.27f, 0.27f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-        glUseProgram(our_shader.program);
-		
 		float time = glfwGetTime();
-		glm::mat4 model = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, cos(time), -sin(time), 0.0f, 0.0f, sin(time),  cos(time), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-		model = glm::rotate(model, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		float lamp_pos_x = 3*sin(time);
+		float lamp_pos_z = 3*cos(time);
+
+		// draw object ---------------------------------------------------------------
+        glUseProgram(our_shader.program);
+		glm::mat4 model = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+		//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
 
+		glUniform3f(glGetUniformLocation(our_shader.program, "lamp_pos"), lamp_pos_x, 0.0f, lamp_pos_z);
 		glUniform3f(glGetUniformLocation(our_shader.program, "light_color"), 1.0f, 1.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(our_shader.program, "box_color"), 0.93f, 0.47f, 0.29f);
 
 		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		
+		// draw lamp --------------------------------------------------------------------
+        glUseProgram(lamp_shader.program);
+
+		glm::mat4 model_lamp = {0.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.2f, 0.0f, 0.0f, 0.0f, 0.0f, 0.2f, 0.0f, lamp_pos_x, 0.0f, lamp_pos_z, 1.0f};
+		model_lamp = glm::rotate(model_lamp, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		model_lamp = glm::rotate(model_lamp, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		glm::mat4 view_lamp = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(glGetUniformLocation(lamp_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model_lamp));
+		glUniformMatrix4fv(glGetUniformLocation(lamp_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view_lamp));
+		glUniformMatrix4fv(glGetUniformLocation(lamp_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
+
+		glBindVertexArray(VAO_lamp);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
@@ -168,6 +231,8 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 
+	glDeleteVertexArrays(1, &VAO_lamp);
+	glDeleteBuffers(1, &VBO_lamp);
 	glfwTerminate();
     return 0;
 }
