@@ -136,7 +136,7 @@ int main()
 		// face6, triangle2
 		-0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 
 		 0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 
-		 0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 
+		 0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f 
 	};
 	// ==================================================================================
 	// Defining VAO and VBO
@@ -180,6 +180,12 @@ int main()
 	glm::mat4 projection_perspective = {1/(ar*tan(angle/2)), 0, 0, 0, 0, 1/tan(angle/2), 0, 0, 0, 0, -(f+n)/(f-n), -2*f*n/(f-n), 0, 0, -1, 0};
 	projection_perspective = glm::transpose(projection_perspective);
 
+	// ================================================================================= 
+	// ambient light
+	float ambient_strength = 0.3f;
+	glm::vec3 light_color = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 ambient_light = ambient_strength * light_color;
+
 	while(!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -193,8 +199,8 @@ int main()
 
 		// draw object ---------------------------------------------------------------
         glUseProgram(our_shader.program);
-		glm::mat4 model = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-		//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		glm::mat4 model = {1.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+		model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -202,6 +208,10 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "projection"), 1, GL_FALSE, glm::value_ptr(projection_perspective));
 
+		// ambient light
+		glUniform3f(glGetUniformLocation(our_shader.program, "ambient_light"), ambient_light.x, ambient_light.y, ambient_light.z);
+
+		// diffused light
 		glUniform3f(glGetUniformLocation(our_shader.program, "lamp_pos"), lamp_pos_x, 0.0f, lamp_pos_z);
 		glUniform3f(glGetUniformLocation(our_shader.program, "light_color"), 1.0f, 1.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(our_shader.program, "box_color"), 0.93f, 0.47f, 0.29f);
