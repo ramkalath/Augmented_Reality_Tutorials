@@ -40,7 +40,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "emerald material", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Lighting Properties", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 
@@ -182,16 +182,21 @@ int main()
 
 	// ================================================================================= 
 	// material properties
-	glm::vec3 material_ambient = glm::vec3(0.0215f, 0.1745f, 0.0215f);
-	glm::vec3 material_diffuse = glm::vec3(0.07568f, 0.61424f, 0.07568f);
+	glm::vec3 material_ambient = glm::vec3(0.615f, 0.545f, 0.5515f);
+	glm::vec3 material_diffuse = glm::vec3(0.7568f, 0.61424f, 0.7568f);
 	glm::vec3 material_specular = glm::vec3(0.633f, 0.727811f, 0.633f);
-	float material_shininess = 0.6 * 128;
+	float material_shininess = 0.01 * 128;
+
+	// ================================================================================= 
+	// light properties
+	glm::vec3 light_ambient = glm::vec3(0.6f, 0.6f, 0.7f);
+	glm::vec3 light_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::vec3 light_specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	// ================================================================================= 
 	// ambient light
 	float ambient_strength = 0.3f;
-	glm::vec3 light_color = glm::vec3(1.0f, 1.0f, 1.0f);
-	glm::vec3 ambient_light = ambient_strength * (light_color * material_ambient);
+	glm::vec3 ambient_light = ambient_strength * (light_ambient * material_ambient);
 
 	while(!glfwWindowShouldClose(window))
 	{
@@ -220,7 +225,6 @@ int main()
 
 		// diffused light
 		glUniform3f(glGetUniformLocation(our_shader.program, "lamp_pos"), lamp_pos_x, 0.0f, lamp_pos_z);
-		glUniform3f(glGetUniformLocation(our_shader.program, "light_color"), 1.0f, 1.0f, 1.0f);
 		glUniform3f(glGetUniformLocation(our_shader.program, "box_color"), 0.93f, 0.47f, 0.29f);
 		glUniform3f(glGetUniformLocation(our_shader.program, "camera_pos"), 0.0f, 0.0f, 0.0f);
 
@@ -228,6 +232,11 @@ int main()
 		glUniform3f(glGetUniformLocation(our_shader.program, "material_diffuse"), material_diffuse.x, material_diffuse.y, material_diffuse.z);
 		glUniform1f(glGetUniformLocation(our_shader.program, "material_shininess"), material_shininess*128);
 		glUniform3f(glGetUniformLocation(our_shader.program, "material_specular"), material_specular.x, material_specular.y, material_specular.z);
+
+
+		// lighting uniforms
+		glUniform3f(glGetUniformLocation(our_shader.program, "light_diffuse"), light_diffuse.x, light_diffuse.y, light_diffuse.z);
+		glUniform3f(glGetUniformLocation(our_shader.program, "light_specular"), light_specular.x, light_specular.y, light_specular.z);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
