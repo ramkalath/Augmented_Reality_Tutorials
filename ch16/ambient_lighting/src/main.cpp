@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 1/September/2018
+ * Date : 4/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : colors
- * Detailed Description : Implements colors for an object
+ * Breif Description : ambient lighting
+ * Detailed Description : implementation of our first mode of lighting - ambient
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>

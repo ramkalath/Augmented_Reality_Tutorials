@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 1/September/2018
+ * Date : 9/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : diffused lighting
- * Detailed Description : Implements diffused lighting
+ * Breif Description : lighting with suzanne
+ * Detailed Description : Implements all three lighting and material with suzanne
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -215,7 +215,6 @@ int main()
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, size_of_indices_array/sizeof(GLuint), GL_UNSIGNED_INT, 0);
-		//glDrawArrays(GL_TRIANGLES, 0, size_of_indices_array/sizeof(GLuint));
 		glBindVertexArray(0);
 		
 		// draw lamp --------------------------------------------------------------------

@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 1/September/2018
+ * Date : 5/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : diffused lighting
- * Detailed Description : Implements diffused lighting
+ * Breif Description : materials with finer specular lighting control
+ * Detailed Description : Implementation of materials. Custom material - not taken from the material chart
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>

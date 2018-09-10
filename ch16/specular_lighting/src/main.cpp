@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 1/September/2018
+ * Date : 4/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : diffused lighting
- * Detailed Description : Implements diffused lighting
+ * Breif Description : specular lighting
+ * Detailed Description : ambient+diffused+specular lighting. Causes a marked improvement in visual appeal.
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>

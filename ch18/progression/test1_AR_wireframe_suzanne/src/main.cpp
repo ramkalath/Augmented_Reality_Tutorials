@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 29/August/2018
+ * Date : 9/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : AR with bg as perspective projection
- * Detailed Description : implements complete AR with the model of a suzanne. Suzanne object and bg object has perspective projection. To run this file type './run.sh'
+ * Breif Description : AR with a blue cube
+ * Detailed Description : This serves as a progression for integrating lighting and AR matrices.
  *****************************************************************************/
 
 // usual imports

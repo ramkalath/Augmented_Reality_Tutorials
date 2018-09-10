@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 3/August/2018
+ * Date : 8/Septermber/2018
  * Email : ramkalath@gmail.com
- * Breif Description : Model matrix on the box to make it larger and to impose a rotation
- * Detailed Description : We explore a model matrix in this section that resizes the box and rotates it as its being kept in the world space.
+ * Breif Description : wiremesh rotating box
+ * Detailed Description : rotating box wire mesh. Used as template code elsewhere
  *****************************************************************************/
 #include <iostream>
 #define GLEW_STATIC
@@ -27,6 +27,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
 int main()
 {
+	
 	int width = 800;
 	int height = 600;
     // initializing glfw -------------------------------------------------------------------
@@ -99,10 +100,10 @@ int main()
         glClearColor(0.27f, 0.27f, 0.27f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		float time = glfwGetTime();
+		float sin_time = sin(glfwGetTime());
 		glm::mat4 model = glm::mat4(1.0f); 
-		model = glm::rotate(model, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(sin_time*90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(sin_time*90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 projection_perspective = glm::perspective(45.0f, (GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));

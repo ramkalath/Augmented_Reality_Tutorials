@@ -1,9 +1,9 @@
 /*****************************************************************************
  * Author : Ram
- * Date : 1/September/2018
+ * Date : 5/September/2018
  * Email : ramkalath@gmail.com
- * Breif Description : diffused lighting
- * Detailed Description : Implements diffused lighting
+ * Breif Description : basic materials implementation
+ * Detailed Description : Ember material on a cube with lighting
  *****************************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>
