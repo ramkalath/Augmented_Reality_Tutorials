@@ -69,11 +69,9 @@ int main()
 	Shader our_shader("./shaders/vertex_shader.vert", "./shaders/fragment_shader.frag");
 
     //----------------------------------------------------------------------------------------
-
 	// Assimp importer ====================================================================
 	Assimp::Importer importer;
-	//const std::string& path = "/home/ram/Downloads/3d_models/old/cube/cube01.obj"; // Remember to give absolute path
-	const std::string& path = "./resources/suzanne.obj"; // Remember to give absolute path
+	const std::string& path = "./resources/suzanne.obj"; 
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if(!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -134,10 +132,11 @@ int main()
         glClearColor(0.27f, 0.27f, 0.27f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		float time = glfwGetTime();
+		float time = sin(glfwGetTime());
 		glm::mat4 model = glm::mat4(1.0f); 
-		model = glm::rotate(model, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(sin(time)*90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+		model = glm::rotate(model, glm::radians(time*90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(time*90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::mat4 projection_perspective = glm::perspective(45.0f, (GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
 		glUniformMatrix4fv(glGetUniformLocation(our_shader.program, "model"), 1, GL_FALSE, glm::value_ptr(model));

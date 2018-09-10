@@ -3,7 +3,7 @@
  * Date : 29/August/2018
  * Email : ramkalath@gmail.com
  * Breif Description : AR with bg as perspective projection
- * Detailed Description : implements complete AR with the model of a crate. Crate object and bg object has perspective projection. To run this file type './run.sh'
+ * Detailed Description : implements complete AR with the model of a suzanne. Suzanne object and bg object has perspective projection. To run this file type './run.sh'
  *****************************************************************************/
 
 // usual imports
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(width_window, height_window, "AR with a crate", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(width_window, height_window, "AR with a suzanne", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 	glfwGetFramebufferSize(window, &width_window, &height_window);
 	glViewport(0, 0, width_window, height_window);
 
-	Shader crate_shader("./shaders/crate_vertex_shader.vert", "./shaders/crate_fragment_shader.frag");
+	Shader suzanne_shader("./shaders/suzanne_vertex_shader.vert", "./shaders/suzanne_fragment_shader.frag");
 	Shader bg_shader("./shaders/bg_vertex_shader.vert", "./shaders/bg_fragment_shader.frag");
 
  	// =========================================================================================================
@@ -97,126 +97,76 @@ int main(int argc, char **argv)
 	cv::VideoCapture cap(atoi(argv[1]));
  
  	// =========================================================================================================
-	// Crate object definitions
+	// suzanne object definitions
 	GLfloat vertices[] = 
  	{
-    	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    	-0.5f, -0.5f, -0.5f,
+    	 0.5f, -0.5f, -0.5f,
+    	 0.5f,  0.5f, -0.5f,
+    	 0.5f,  0.5f, -0.5f,
+    	-0.5f,  0.5f, -0.5f,
+    	-0.5f, -0.5f, -0.5f,
 	
-    	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    	-0.5f, -0.5f,  0.5f,
+    	 0.5f, -0.5f,  0.5f,
+    	 0.5f,  0.5f,  0.5f,
+    	 0.5f,  0.5f,  0.5f,
+    	-0.5f,  0.5f,  0.5f,
+    	-0.5f, -0.5f,  0.5f,
 
-    	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-   		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    	-0.5f,  0.5f,  0.5f,
+    	-0.5f,  0.5f, -0.5f,
+    	-0.5f, -0.5f, -0.5f,
+    	-0.5f, -0.5f, -0.5f,
+   		-0.5f, -0.5f,  0.5f,
+    	-0.5f,  0.5f,  0.5f,
 
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    	 0.5f,  0.5f,  0.5f,
+    	 0.5f,  0.5f, -0.5f,
+    	 0.5f, -0.5f, -0.5f,
+    	 0.5f, -0.5f, -0.5f,
+    	 0.5f, -0.5f,  0.5f,
+    	 0.5f,  0.5f,  0.5f,
 
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    	-0.5f, -0.5f, -0.5f,
+    	 0.5f, -0.5f, -0.5f,
+    	 0.5f, -0.5f,  0.5f,
+    	 0.5f, -0.5f,  0.5f,
+    	-0.5f, -0.5f,  0.5f,
+    	-0.5f, -0.5f, -0.5f,
 
-    	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-   		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    	-0.5f,  0.5f, -0.5f,
+    	 0.5f,  0.5f, -0.5f,
+    	 0.5f,  0.5f,  0.5f,
+    	 0.5f,  0.5f,  0.5f,
+    	-0.5f,  0.5f,  0.5f,
+   		-0.5f,  0.5f, -0.5f
 	};
 	
 	// -----------------------------------------------------------------------------------------------
-	// vao and vbo objects of crate
-	GLuint VBO_crate, VAO_crate;
-	glGenVertexArrays(1, &VAO_crate);
-	glGenBuffers(1, &VBO_crate);
-
-	glBindVertexArray(VAO_crate);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_crate);
+	// vao and vbo objects of suzanne
+	GLuint VBO_suzanne, VAO_suzanne;
+	glGenVertexArrays(1, &VAO_suzanne);
+	glGenBuffers(1, &VBO_suzanne);
+	glBindVertexArray(VAO_suzanne);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_suzanne);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
-	// Postion Attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-
-	// Texture Attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
 	glBindVertexArray(0); // Unbind VAO
 	
-	// -----------------------------------------------------------------------------------------------
-	// Texture Stuff
-	GLuint texture1, texture2;
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height;
-	unsigned char* image1 = SOIL_load_image("./resources/wood.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image1);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image1);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	unsigned char* image2 = SOIL_load_image("./resources/batman.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image2);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
  	// =========================================================================================================
-	// crate transformations presets (scaling, default modelview and perspective projection)
-	glm::mat4 model_crate;
-	model_crate = glm::scale(model_crate, glm::vec3(5.0f, 5.0f, 5.0f));
-	model_crate = glm::translate(model_crate, glm::vec3(0.5f, 0.5f, -0.5f));
-
-	// defining the projection matrix
+	// suzanne transformations presets (scaling, default modelview and perspective projection)
+	glm::mat4 model_suzanne;
+	model_suzanne= glm::scale(model_suzanne, glm::vec3(5.0f, 5.0f, 5.0f));
+	model_suzanne= glm::translate(model_suzanne, glm::vec3(0.5f, 0.5f, -0.5f));
 	float near = 0.1f;
 	float far = 500.0f;
 	float fx = intrinsic_matrix.at<float>(0,0);
 	float fy = intrinsic_matrix.at<float>(1,1);
 	float cx = intrinsic_matrix.at<float>(0,2);
 	float cy = intrinsic_matrix.at<float>(1,2);
-
-	glm::mat4 perspective_projection = {fx/cx, 0, 0, 0,
-							  0, fy/cy, 0, 0,
-							  0, 0, -(far+near)/(far-near), -(2*far*near)/(far-near),
-							  0, 0, -1, 0};
-
+	glm::mat4 perspective_projection = {fx/cx, 0, 0, 0, 0, fy/cy, 0, 0, 0, 0, -(far+near)/(far-near), -(2*far*near)/(far-near), 0, 0, -1, 0};
 	perspective_projection = glm::transpose(perspective_projection);
 
  	// =========================================================================================================
@@ -255,8 +205,8 @@ int main(int argc, char **argv)
 	// -----------------------------------------------------------------------------------------------
 	// webcam texture
 	cap >> frame;
-	width = frame.size().width;
-	height = frame.size().height;
+	int width = frame.size().width;
+	int height = frame.size().height;
 
 	GLuint texture_bg;
 	glGenTextures(1, &texture_bg);
@@ -286,32 +236,26 @@ int main(int argc, char **argv)
 
 		cap >> frame;
 		marker1.marker_detect(frame);
-		glm::mat4 modelview_crate = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 10, 0, 0, 0, 1};
+		glm::mat4 modelview_suzanne= {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 10, 0, 0, 0, 1};
 
 		// there is a detect_flag variable which is of bool datatype and is set to 1 if the marker is detected.
 		if(marker1.detect_flag)
 		{
 			cv::Rodrigues(marker1.rvecs, rot_mat);
 			// defining the modelveiw matrix based on tvecs and rotation matrix
-			modelview_crate = {rot_mat.at<double>(0,0), rot_mat.at<double>(0,1), rot_mat.at<double>(0,2), marker1.tvecs.at<double>(0), -rot_mat.at<double>(1,0), -rot_mat.at<double>(1,1), -rot_mat.at<double>(1,2), -marker1.tvecs.at<double>(1), -rot_mat.at<double>(2,0), -rot_mat.at<double>(2,1), -rot_mat.at<double>(2,2), -marker1.tvecs.at<double>(2), 0.0f, 0.0f, 0.0f, 1.0f};
+			modelview_suzanne = {rot_mat.at<double>(0,0), rot_mat.at<double>(0,1), rot_mat.at<double>(0,2), marker1.tvecs.at<double>(0), -rot_mat.at<double>(1,0), -rot_mat.at<double>(1,1), -rot_mat.at<double>(1,2), -marker1.tvecs.at<double>(1), -rot_mat.at<double>(2,0), -rot_mat.at<double>(2,1), -rot_mat.at<double>(2,2), -marker1.tvecs.at<double>(2), 0.0f, 0.0f, 0.0f, 1.0f};
 		}
-		modelview_crate = glm::transpose(modelview_crate);
+		modelview_suzanne = glm::transpose(modelview_suzanne);
 
-		// draw crate ------------------------------------------------------------------------------------------
-		glUseProgram(crate_shader.program);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);
-		glUniform1i(glGetUniformLocation(crate_shader.program, "batman_texture"), 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
-		glUniform1i(glGetUniformLocation(crate_shader.program, "wood_texture"), 1);
 		
-		glBindVertexArray(VAO_crate);
+		// draw suzanne ------------------------------------------------------------------------------------------
+		glUseProgram(suzanne_shader.program);
+		
+		glBindVertexArray(VAO_suzanne);
 
-		glUniformMatrix4fv(glGetUniformLocation(crate_shader.program, "model_crate"), 1, GL_FALSE, glm::value_ptr(model_crate));
-		glUniformMatrix4fv(glGetUniformLocation(crate_shader.program, "modelview_crate"), 1, GL_FALSE, glm::value_ptr(modelview_crate));
-		glUniformMatrix4fv(glGetUniformLocation(crate_shader.program, "perspective_projection_crate"), 1, GL_FALSE, glm::value_ptr(perspective_projection));
+		glUniformMatrix4fv(glGetUniformLocation(suzanne_shader.program, "model_suzanne"), 1, GL_FALSE, glm::value_ptr(model_suzanne));
+		glUniformMatrix4fv(glGetUniformLocation(suzanne_shader.program, "modelview_suzanne"), 1, GL_FALSE, glm::value_ptr(modelview_suzanne));
+		glUniformMatrix4fv(glGetUniformLocation(suzanne_shader.program, "perspective_projection_suzanne"), 1, GL_FALSE, glm::value_ptr(perspective_projection));
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
@@ -320,11 +264,10 @@ int main(int argc, char **argv)
 		glUseProgram(bg_shader.program);
 		glBindVertexArray(VAO_bg);
 
-		glActiveTexture(GL_TEXTURE2);
+		glActiveTexture(GL_TEXTURE0);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, frame.data);
 		glBindTexture(GL_TEXTURE_2D, texture_bg);
-		glUniform1i(glGetUniformLocation(bg_shader.program, "webcam_texture"), 2);
-
+		glUniform1i(glGetUniformLocation(bg_shader.program, "webcam_texture"), 0);
 		glUniformMatrix4fv(glGetUniformLocation(bg_shader.program, "modelview_bg"), 1, GL_FALSE, glm::value_ptr(modelview_bg));
 		glUniformMatrix4fv(glGetUniformLocation(bg_shader.program, "perspective_projection_bg"), 1, GL_FALSE, glm::value_ptr(perspective_projection));
 
@@ -335,8 +278,8 @@ int main(int argc, char **argv)
 		glfwSwapBuffers(window);
 	}
 
-	glDeleteVertexArrays(1, &VAO_crate);
-	glDeleteBuffers(1, &VBO_crate);
+	glDeleteVertexArrays(1, &VAO_suzanne);
+	glDeleteBuffers(1, &VBO_suzanne);
 
 	glDeleteVertexArrays(1, &VAO_bg);
 	glDeleteBuffers(1, &VBO_bg);

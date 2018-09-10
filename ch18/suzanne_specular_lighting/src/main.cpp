@@ -215,6 +215,7 @@ int main()
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, size_of_indices_array/sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, size_of_indices_array/sizeof(GLuint));
 		glBindVertexArray(0);
 		
 		// draw lamp --------------------------------------------------------------------
