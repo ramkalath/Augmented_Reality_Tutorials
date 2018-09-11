@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 		glUniform3f(glGetUniformLocation(suzanne_shader.program, "ambient_light"), ambient_light.x, ambient_light.y, ambient_light.z);
 		glUniform3f(glGetUniformLocation(suzanne_shader.program, "lamp_pos"), lamp_pos_x, lamp_pos_y, lamp_pos_z);
 		glUniform3f(glGetUniformLocation(suzanne_shader.program, "light_color"), 1.0f, 1.0f, 1.0f);
-		glUniform3f(glGetUniformLocation(suzanne_shader.program, "suzanne_color"), 0.96f, 0.96f, 0.96f);
+		glUniform3f(glGetUniformLocation(suzanne_shader.program, "suzanne_color"), 0.4f, 0.4f, 0.4f);
 		glUniform3f(glGetUniformLocation(suzanne_shader.program, "camera_pos"), 0.0f, 0.0f, 0.0f);
 		glDrawElements(GL_TRIANGLES, size_of_indices_array/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
