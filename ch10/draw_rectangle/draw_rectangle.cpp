@@ -45,7 +45,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Rectangle from Triangles", nullptr, nullptr);
     if(window == nullptr)
     {
         cout << "Failed to create a GLFW window" << endl;
