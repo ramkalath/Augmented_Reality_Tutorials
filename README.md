@@ -4,5 +4,5 @@ Chapters from the book "Demystifying AR" will walk you through the basic buildin
 
 Enjoy :)
 
-To download this content:
+To download this content type -> 
 git clone https://github.com/ramkalath/Augmented_Reality_Tutorials
