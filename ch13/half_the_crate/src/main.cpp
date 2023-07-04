@@ -160,6 +160,7 @@ int main()
     //---------------------------------------------------------------------------------------
 	// Let us create a basic model matrix
 	// notice the first 3 elements of the leading diagonal is 0.5 which reduces the size of the crate along each axis by half
+	glUseProgram(our_shader.program);
 	glm::mat4 half_size_matrix = {0.5f, 0.0f, 0.0f, 0.0f,
 								  0.0f, 0.5f, 0.0f, 0.0f,
 								  0.0f, 0.0f, 0.5f, 0.0f,
@@ -189,7 +190,7 @@ int main()
 		glUniform1i(glGetUniformLocation(our_shader.program, "wood_texture"), 1);
 
         // Draw a rectangle
-        glUseProgram(our_shader.program);
+        
         glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
